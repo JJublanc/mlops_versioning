@@ -1,21 +1,15 @@
-import git
+from wrapper_tools.commit import check_branch, commit_code
 import os
 import mlflow
 import pickle
 
 
-def versioning_wrapper(func):
-    def wrapper(branch:str, gitwd:str, *args, **kwargs):
+def train_wrapper(func):
+    def wrapper(branch: str, gitwd: str, *args, **kwargs):
         ##########################
         # Set repo git in python #
         ##########################
-        repo = git.Repo(gitwd)
-        local_branch = repo.active_branch.name
-        try:
-            assert local_branch == branch
-        except AssertionError:
-            raise AssertionError(f"You are not in branch {branch}. "
-                                 f"Just checkout to this branch and try again!")
+        repo = check_branch(branch, gitwd)
 
         #####################
         # Set mlflow params #
@@ -51,13 +45,8 @@ def versioning_wrapper(func):
         # Commit code #
         ###############
 
-        files = repo.git.diff(None, name_only=True)
-        for f in files.split('\n'):
-            repo.git.add(f)
-
-        repo.git.commit("-m", f"exp(run_id) {run_id}")
+        commit_code(repo, f"exp(train): run_id={run_id}")
 
         return results
 
     return wrapper
-

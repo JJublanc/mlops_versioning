@@ -1,9 +1,9 @@
-from versioning_wrapper import versioning_wrapper
+from train_wrapper import train_wrapper
 import os
 
 branch_to_exp = "train"
 
-@versioning_wrapper
+@train_wrapper
 def train():
     metrics = {"accuracy": 0.6}
     model = ["object", "that", "can", "be", "pickled!"]
@@ -15,5 +15,5 @@ def train():
 
 if __name__ == "__main__":
     cwd = os.getcwd()
-    train(branch=branch_to_exp,
+    train(branch="main", # branch_to_exp,
           gitwd=cwd)
