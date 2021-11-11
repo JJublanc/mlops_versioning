@@ -16,11 +16,7 @@ if "iris.csv" not in os.listdir("data"):
     data.to_csv('data/iris.csv', index=False)
 
 
-def preprocess(data: pd.DataFrame,
-               target_col: str,
-               features_cols: list):
-    X = data[features_cols]
-    y = data[target_col]
+def preprocess(X: pd.DataFrame, y: pd.Series):
     X_train, X_test, y_train, y_test = train_test_split(X,
                                                         y,
                                                         test_size=0.4,
@@ -43,11 +39,9 @@ def preprocess(data: pd.DataFrame,
 if __name__ == "__main__":
 
     data_output = preprocess(data,
-                             target_col="target",
-                             features_cols=features_cols)
+                             target_col="target")
 
     for key, value in data_output.items():
         value.to_csv(f"./data/{key}.csv", index=False)
         logging.info(f"./data/{key}.csv")
         print(f"./data/{key}.csv saved")
-

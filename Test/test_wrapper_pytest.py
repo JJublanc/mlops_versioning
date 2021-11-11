@@ -1,7 +1,8 @@
 import pytest
 import pandas as pd
-from preprocess_wrapper import add_col_prefix_ds
+from preprocess_wrapper import add_col_prefix_ds, get_data
 import numpy as np
+import mock
 
 
 @pytest.fixture
@@ -37,3 +38,18 @@ def test_add_col_prefix_ds(data_sample):
                                   "id_identification_col",
                                   "feature_unused_col",
                                   "feature_unused_col2"]
+
+
+@mock.patch('preprocess_wrapper.pd.read_csv',
+            return_value=pd.DataFrame({"target": [0, 1],
+                                       "feature": [0, 1]}))
+def test_get_data():
+    X, y = get_data("data_path",
+                    "target")
+
+    assert list(X.columns) == ["feature"]
+
+    X, y = get_data("data_path",
+                    ["target"])
+
+    assert list(X.columns) == ["feature"]

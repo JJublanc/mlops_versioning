@@ -1,9 +1,19 @@
 from wrapper_tools.commit import check_branch, commit_code
 import pandas as pd
 from typing import Union
-import os
-import mlflow
-import pickle
+
+def get_data(data_path: str,
+             target_cols: Union[str, list]):
+    data = pd.read_csv(data_path)
+
+    if isinstance(target_cols, str):
+        other_columns = list(set(data.columns) - set([target_cols]))
+    elif isinstance(target_cols, list):
+        other_columns = list(set(data.columns) - set(target_cols))
+    X = data[other_columns]
+    y = data[target_cols]
+
+    return X, y
 
 
 def add_col_prefix_ds(data: pd.DataFrame,
@@ -27,31 +37,34 @@ def add_col_prefix_ds(data: pd.DataFrame,
 
 
 def preprocess_wrapper(func):
-    def wrapper(branch: str,
-                gitwd: str,
-                target_col: str,
-                data_path: str,
-                id_cols: list,
-                drop_cols: list,
-                target_cols,
-                *args, **kwargs):
+    def wrapper(wrapper_branch: str,
+                wrapper_gitwd: str,
+                wrapper_data_path: str,
+                wrapper_id_cols: Union[list, str],
+                wrapper_drop_cols: Union[list, str],
+                wrapper_target_cols: Union[list, str]):
 
         ##########################
         # Set repo git in python #
         ##########################
-        repo = check_branch(branch, gitwd)
+        repo = check_branch(wrapper_branch, wrapper_gitwd)
 
-        #############
-        # Load data #
-        #############
+        ############
+        # Get data #
+        ############
 
-        data = pd.read_csv(data_path)
+        X, y = get_data(path=wrapper_data_path,
+                        target_cols=wrapper_target_cols)
+        data = pd.read_csv(wrapper_data_path)
+        other_columns = list(set(data.columns) - set(wrapper_target_cols))
+        X = data[other_columns]
+        y = data[wrapper_target_cols]
 
         ##############
         # Preprocess #
         ##############
 
-        output = func(*args, **kwargs)
+        output = func(X, y)
 
         ##################
         # add col prefix #
@@ -61,17 +74,23 @@ def preprocess_wrapper(func):
             for key, data in output.items():
                 if isinstance(data, pd.DataFrame):
                     output[key] = add_col_prefix_ds(data,
-                                                    id_cols,
-                                                    target_cols,
-                                                    drop_cols)
+                                                    wrapper_id_cols,
+                                                    wrapper_target_cols,
+                                                    wrapper_drop_cols)
         elif isinstance(output, pd.DataFrame):
             output = add_col_prefix_ds(output,
-                                       id_cols,
-                                       target_cols,
-                                       drop_cols)
+                                       wrapper_id_cols,
+                                       wrapper_target_cols,
+                                       wrapper_drop_cols)
 
-        ########################
-        # create global prefix #
-        ########################
+        ##############################
+        # TODO: Create global prefix #
+        ##############################
 
+        ###################
+        # TODO: Save data #
+        ###################
 
+        return output
+
+    return wrapper
