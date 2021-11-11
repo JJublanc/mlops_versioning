@@ -1,10 +1,10 @@
 import os
+from wrapper.preprocess_wrapper import preprocess_wrapper
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn import datasets
 import numpy as np
-import logging
 
 target_col = 'target'
 
@@ -16,6 +16,7 @@ if "iris.csv" not in os.listdir("data"):
     data.to_csv('data/iris.csv', index=False)
 
 
+@preprocess_wrapper
 def preprocess(X: pd.DataFrame, y: pd.Series):
     X_train, X_test, y_train, y_test = train_test_split(X,
                                                         y,
@@ -37,11 +38,8 @@ def preprocess(X: pd.DataFrame, y: pd.Series):
 
 
 if __name__ == "__main__":
-
-    data_output = preprocess(data,
-                             target_col="target")
-
-    for key, value in data_output.items():
-        value.to_csv(f"./data/{key}.csv", index=False)
-        logging.info(f"./data/{key}.csv")
-        print(f"./data/{key}.csv saved")
+    cwd = os.getcwd()
+    data_output = preprocess(wrapper_branch="main",
+                             wrapper_gitwd=cwd,
+                             wrapper_data_path='data/iris.csv',
+                             wrapper_target_cols="target")

@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from preprocess_wrapper import add_col_prefix_ds, get_data
+from wrapper.preprocess_wrapper import add_col_prefix_ds, get_data
 import numpy as np
 import mock
 
@@ -40,10 +40,10 @@ def test_add_col_prefix_ds(data_sample):
                                   "feature_unused_col2"]
 
 
-@mock.patch('preprocess_wrapper.pd.read_csv',
+@mock.patch('wrapper.preprocess_wrapper.pd.read_csv',
             return_value=pd.DataFrame({"target": [0, 1],
                                        "feature": [0, 1]}))
-def test_get_data():
+def test_get_data(mock):
     X, y = get_data("data_path",
                     "target")
 

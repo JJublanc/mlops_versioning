@@ -1,11 +1,11 @@
-from train_wrapper import train_wrapper
+from wrapper.train_wrapper import train_wrapper
 import os
 
 branch_to_exp = "train"
 
 @train_wrapper
 def train():
-    metrics = {"accuracy": 0.6}
+    metrics = {"accuracy": 0.7}
     model = ["object", "that", "can", "be", "pickled!"]
 
     results = {"metrics":metrics,

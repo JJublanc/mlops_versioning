@@ -1,6 +1,11 @@
-from wrapper_tools.commit import check_branch, commit_code
+import calendar
+import time
+
+from wrapper.commit import check_branch, commit_code
 import pandas as pd
 from typing import Union
+import logging
+
 
 def get_data(data_path: str,
              target_cols: Union[str, list]):
@@ -39,10 +44,10 @@ def add_col_prefix_ds(data: pd.DataFrame,
 def preprocess_wrapper(func):
     def wrapper(wrapper_branch: str,
                 wrapper_gitwd: str,
-                wrapper_data_path: str,
-                wrapper_id_cols: Union[list, str],
-                wrapper_drop_cols: Union[list, str],
-                wrapper_target_cols: Union[list, str]):
+                wrapper_data_path: str = "",
+                wrapper_id_cols: Union[list, str] = "",
+                wrapper_drop_cols: Union[list, str] = "",
+                wrapper_target_cols: Union[list, str] = ""):
 
         ##########################
         # Set repo git in python #
@@ -53,44 +58,54 @@ def preprocess_wrapper(func):
         # Get data #
         ############
 
-        X, y = get_data(path=wrapper_data_path,
+        X, y = get_data(data_path=wrapper_data_path,
                         target_cols=wrapper_target_cols)
-        data = pd.read_csv(wrapper_data_path)
-        other_columns = list(set(data.columns) - set(wrapper_target_cols))
-        X = data[other_columns]
-        y = data[wrapper_target_cols]
 
         ##############
         # Preprocess #
         ##############
 
-        output = func(X, y)
+        data_output = func(X, y)
 
         ##################
         # add col prefix #
         ##################
 
-        if isinstance(output, dict):
-            for key, data in output.items():
+        if isinstance(data_output, dict):
+            for key, data in data_output.items():
                 if isinstance(data, pd.DataFrame):
-                    output[key] = add_col_prefix_ds(data,
-                                                    wrapper_id_cols,
-                                                    wrapper_target_cols,
-                                                    wrapper_drop_cols)
-        elif isinstance(output, pd.DataFrame):
-            output = add_col_prefix_ds(output,
-                                       wrapper_id_cols,
-                                       wrapper_target_cols,
-                                       wrapper_drop_cols)
+                    data_output[key] = add_col_prefix_ds(data,
+                                                         wrapper_id_cols,
+                                                         wrapper_target_cols,
+                                                         wrapper_drop_cols)
+        elif isinstance(data_output, pd.DataFrame):
+            data_output = add_col_prefix_ds(data_output,
+                                            wrapper_id_cols,
+                                            wrapper_target_cols,
+                                            wrapper_drop_cols)
 
-        ##############################
-        # TODO: Create global prefix #
-        ##############################
+        ########################
+        # Create global prefix #
+        ########################
 
-        ###################
-        # TODO: Save data #
-        ###################
+        # get current timestamp
+        gmt = time.gmtime()
+        ts = calendar.timegm(gmt)
 
-        return output
+        #############
+        # Save data #
+        #############
+
+        for key, value in data_output.items():
+            value.to_csv(f"./data/{ts}_{key}.csv", index=False)
+            logging.info(f"./data/{ts}_{key}.csv saved")
+
+        ##########
+        # Commit #
+        ##########
+
+        commit_code(repo, f"exp(preprocess): timestamp={ts}")
+
+        return data_output
 
     return wrapper
