@@ -41,8 +41,7 @@ def preprocess(data: pd.DataFrame,
 
 
 if __name__ == "__main__":
-    data = pd.read_csv("data/iris.csv")
-    features_cols = list(data.columns.drop(target_col))
+
     data_output = preprocess(data,
                              target_col="target",
                              features_cols=features_cols)
@@ -51,3 +50,4 @@ if __name__ == "__main__":
         value.to_csv(f"./data/{key}.csv", index=False)
         logging.info(f"./data/{key}.csv")
         print(f"./data/{key}.csv saved")
+
