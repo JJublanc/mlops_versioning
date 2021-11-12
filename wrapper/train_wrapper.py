@@ -5,11 +5,11 @@ import pickle
 
 
 def train_wrapper(func):
-    def wrapper(branch: str, gitwd: str, *args, **kwargs):
+    def wrapper(wrapper_branch: str, wrapper_gitwd: str, *args, **kwargs):
         ##########################
         # Set repo git in python #
         ##########################
-        repo = check_branch(branch, gitwd)
+        repo = check_branch(wrapper_branch, wrapper_gitwd)
 
         #####################
         # Set mlflow params #

@@ -15,5 +15,5 @@ def train():
 
 if __name__ == "__main__":
     cwd = os.getcwd()
-    train(branch="main", # branch_to_exp,
-          gitwd=cwd)
+    train(wrapper_branch="main", # branch_to_exp,
+          wrapper_gitwd=cwd)
