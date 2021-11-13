@@ -85,6 +85,39 @@ You also can use another kind of environment ad install dependencies.
 pip install -r requirements.txt
 ```
 
+If you want to use Azure functionality, you'll have to get your connection 
+string to Azure storage and your Azure Workspace config.
+
+__Get your Azure Workspace config__
+Go to the page of your resource group and download the config.json file. Put 
+the file at the root of your project.
+
+__Get you Azure Storage access key__
+Go to the page of the storage of your resource group 'pocorange-rg' and copy 
+the connection string. Then create an env variable containing your connection
+string.
+
+If you run your preprocess and train scripts from Pycharm Console you can 
+add env var going trough the folloxing steps :
+* 1 Edit run configurations
+* 2 Select the run for which you want to add a env var
+* 3 Open Ennvironement Vriables folder
+* 4 Add a new variable
+* 5 Name it AZURE_STORAZGE_CONNECTION_STRING and past the value of your 
+connection string.  
+
+![alt text](./images/set_env_var_pycharm.png)
+
+On bash (and bash like shells)
+```
+export AZURE_STORAGE_CONNECTION_STRING="<connexion string 1>"
+```
+
+On Powershell
+```
+setx AZURE_STORAGE_CONNECTION_STRING "<connexion string 1>"
+```
+
 # Test & examples
 
 To launch unitary tests you can run pytest like that :
