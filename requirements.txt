@@ -4,3 +4,5 @@ scikit-learn==1.0.1
 pytest-mocker==3.6.1
 pytest==5.4.3
 mock==4.0.3
+azureml-mlflow==1.35.0
+azure-storage-blob==12.9.0

@@ -1,15 +1,42 @@
-from wrapper.commit import check_branch, commit_code
-import os
+from azureml.core import Workspace
+from azure.storage.blob import BlobServiceClient
 import mlflow
+import os
+import pandas as pd
 import pickle
+from wrapper.commit import check_branch, commit_code
 
 
 def train_wrapper(func):
-    def wrapper(wrapper_branch: str, wrapper_gitwd: str, *args, **kwargs):
+    def wrapper(wrapper_branch: str,
+                wrapper_gitwd: str,
+                wrapper_origin_file_path: str,
+                wrapper_mlflow_azure: bool = False,
+                wrapper_azure_container_name: str = None,
+                *args, **kwargs):
         ##########################
         # Set repo git in python #
         ##########################
         repo = check_branch(wrapper_branch, wrapper_gitwd)
+
+        ############
+        # Get data #
+        ############
+
+        if wrapper_azure_container_name:
+            if wrapper_origin_file_path not in os.listdir("./data/"):
+                connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+                blob_service_client = BlobServiceClient.from_connection_string(
+                                                                   connect_str)
+                blob_client = blob_service_client.get_blob_client(
+                    container=wrapper_azure_container_name,
+                    blob=wrapper_origin_file_path)
+
+                # Download csv file
+                with open(wrapper_origin_file_path, "wb") as download_file:
+                    download_file.write(blob_client.download_blob().readall())
+
+        data = pd.read_csv(wrapper_origin_file_path)
 
         #####################
         # Set mlflow params #
@@ -17,13 +44,22 @@ def train_wrapper(func):
         experiment_name = 'default_model'
         mlflow.set_experiment(experiment_name)
 
+        #################
+        # Config mlFlow #
+        #################
+
+        if wrapper_mlflow_azure:
+            ws = Workspace.from_config()
+            mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri())
+            mlflow.set_experiment(experiment_name)
+
         with mlflow.start_run():
 
             ####################
             # train your model #
             ####################
 
-            results = func(*args, **kwargs)
+            results = func(data, *args, **kwargs)
 
             ####################
             # log your results #
