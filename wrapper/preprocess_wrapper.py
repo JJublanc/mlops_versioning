@@ -1,11 +1,14 @@
+from azure.storage.blob import BlobServiceClient
 import calendar
+import logging
+import os
+import pandas as pd
 import time
-
+from typing import Union
 from wrapper.commit import check_branch, commit_code
 from wrapper.preprocess import get_data, add_col_prefix_ds
-import pandas as pd
-from typing import Union
-import logging
+
+
 
 
 def preprocess_wrapper(func):
@@ -14,7 +17,8 @@ def preprocess_wrapper(func):
                 wrapper_data_path: str = "",
                 wrapper_id_cols: Union[list, str] = "",
                 wrapper_drop_cols: Union[list, str] = "",
-                wrapper_target_cols: Union[list, str] = ""):
+                wrapper_target_cols: Union[list, str] = "",
+                wrapper_azure_container_name: str = None):
 
         ##########################
         # Set repo git in python #
@@ -66,6 +70,20 @@ def preprocess_wrapper(func):
         for key, value in data_output.items():
             value.to_csv(f"./data/{ts}_{key}.csv", index=False)
             logging.info(f"./data/{ts}_{key}.csv saved")
+
+        if wrapper_azure_container_name is not None:
+            # Set connection to Azure storage container
+            connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+            blob_service_client = BlobServiceClient.from_connection_string(
+                connect_str)
+
+            for key, value in data_output.items():
+                blob_client = blob_service_client.get_blob_client(
+                    container=wrapper_azure_container_name,
+                    blob=f"./data/{ts}_{key}.csv")
+
+                with open(f"./data/{ts}_{key}.csv", "rb") as data:
+                    blob_client.upload_blob(data)
 
         ##########
         # Commit #
