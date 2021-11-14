@@ -6,6 +6,8 @@ from sklearn.model_selection import train_test_split
 from sklearn import datasets
 import numpy as np
 
+from azure.storage.blob import BlobServiceClient
+
 target_col = 'target'
 
 if "iris.csv" not in os.listdir("data"):
@@ -39,7 +41,8 @@ def preprocess(X: pd.DataFrame, y: pd.Series):
 
 if __name__ == "__main__":
     cwd = os.getcwd()
-    data_output = preprocess(wrapper_branch="main",
-                             wrapper_gitwd=cwd,
-                             wrapper_data_path='data/iris.csv',
-                             wrapper_target_cols="target")
+    data_output, ts = preprocess(wrapper_branch="main",
+                                 wrapper_gitwd=cwd,
+                                 wrapper_data_path='data/iris.csv',
+                                 wrapper_target_cols="target",
+                                 wrapper_azure_container_name="data")

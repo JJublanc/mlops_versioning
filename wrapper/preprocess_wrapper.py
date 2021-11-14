@@ -9,8 +9,6 @@ from wrapper.commit import check_branch, commit_code
 from wrapper.preprocess import get_data, add_col_prefix_ds
 
 
-
-
 def preprocess_wrapper(func):
     def wrapper(wrapper_branch: str,
                 wrapper_gitwd: str,
@@ -72,17 +70,22 @@ def preprocess_wrapper(func):
             logging.info(f"./data/{ts}_{key}.csv saved")
 
         if wrapper_azure_container_name is not None:
-            # Set connection to Azure storage container
-            connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
-            blob_service_client = BlobServiceClient.from_connection_string(
-                connect_str)
+            for key in data_output.keys():
+                # Set connection to AZURE
+                connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+                blob_service_client = BlobServiceClient.from_connection_string(
+                    connect_str)
 
-            for key, value in data_output.items():
+                local_path = "./data"
+                local_file_name = f"{ts}_{key}.csv"
+                upload_file_path = os.path.join(local_path, local_file_name)
+
                 blob_client = blob_service_client.get_blob_client(
                     container=wrapper_azure_container_name,
-                    blob=f"./data/{ts}_{key}.csv")
+                    blob=local_file_name)
 
-                with open(f"./data/{ts}_{key}.csv", "rb") as data:
+                # Upload the created file
+                with open(upload_file_path, "rb") as data:
                     blob_client.upload_blob(data)
 
         ##########
@@ -91,6 +94,6 @@ def preprocess_wrapper(func):
 
         commit_code(repo, f"exp(preprocess): timestamp={ts}")
 
-        return data_output
+        return data_output, ts
 
     return wrapper

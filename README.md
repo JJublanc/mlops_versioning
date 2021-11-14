@@ -16,7 +16,7 @@ more than a set of parameters. Indeed in many case the shape of the model can't 
 * when adding a business rule or a rectification step,
 * when complexe deep learning architecture. 
 
-Moreover, it is not always particular to keep track on data used to get a 
+Moreover, it is not always easy to keep track on data used to get a 
 particular level of performances, and for a particular dataset it is not always
 possible to remind which exact transformations have been performed on the row 
 data.
@@ -84,18 +84,27 @@ You also can use another kind of environment ad install dependencies.
 ```
 pip install -r requirements.txt
 ```
-
-If you want to use Azure functionality, you'll have to get your connection 
+### With Azure
+If you want to use Azure functionalities, you'll have to get your connection 
 string to Azure storage and your Azure Workspace config.
 
 __Get your Azure Workspace config__
-Go to the page of your resource group and download the config.json file. Put 
-the file at the root of your project.
+Create a Workspace on Azure ML following the instruction of the documentation:
+* https://docs.microsoft.com/en-us/azure/machine-learning/quickstart-create-resources
+
+Go to the page of your resource group (Microsoft.MachineLearningServices) and 
+download the config.json file. Put the file at the root of your project.
 
 __Get you Azure Storage access key__
-Go to the page of the storage of your resource group 'pocorange-rg' and copy 
-the connection string. Then create an env variable containing your connection
-string.
+To create a storage acocunt follow the doc instructions here : 
+* https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal
+
+Then to create a container follow the instructions here:
+* https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal
+
+Finally go to the page of the storage of your resource group 'pocorange-rg' and 
+copy the connection string. Then create an env variable containing your 
+connection string.
 
 If you run your preprocess and train scripts from Pycharm Console you can 
 add env var going trough the folloxing steps :

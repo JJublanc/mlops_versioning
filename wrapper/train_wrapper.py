@@ -6,7 +6,8 @@ import pandas as pd
 import pickle
 from wrapper.commit import check_branch, commit_code
 
-
+# TODO : add link to commit in mlflow params
+# TODO : add link to data in mlflow params
 def train_wrapper(func):
     def wrapper(wrapper_branch: str,
                 wrapper_gitwd: str,
