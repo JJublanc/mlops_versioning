@@ -11,7 +11,7 @@ from wrapper.commit import check_branch, commit_code
 def train_wrapper(func):
     def wrapper(wrapper_branch: str,
                 wrapper_gitwd: str,
-                wrapper_origin_file_path: str,
+                wrapper_origin_file_name: str,
                 wrapper_mlflow_azure: bool = False,
                 wrapper_azure_container_name: str = None,
                 *args, **kwargs):
@@ -25,19 +25,19 @@ def train_wrapper(func):
         ############
 
         if wrapper_azure_container_name:
-            if wrapper_origin_file_path not in os.listdir("./data/"):
+            if wrapper_origin_file_name not in os.listdir("./data/"):
                 connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
                 blob_service_client = BlobServiceClient.from_connection_string(
                                                                    connect_str)
                 blob_client = blob_service_client.get_blob_client(
                     container=wrapper_azure_container_name,
-                    blob=wrapper_origin_file_path)
+                    blob=wrapper_origin_file_name)
 
                 # Download csv file
-                with open(wrapper_origin_file_path, "wb") as download_file:
+                with open(wrapper_origin_file_name, "wb") as download_file:
                     download_file.write(blob_client.download_blob().readall())
 
-        data = pd.read_csv(wrapper_origin_file_path)
+        data = pd.read_csv("./data/" + wrapper_origin_file_name)
 
         #####################
         # Set mlflow params #
