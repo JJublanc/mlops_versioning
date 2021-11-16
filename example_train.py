@@ -17,7 +17,7 @@ def train(data: pd.DataFrame):
 
 if __name__ == "__main__":
     cwd = os.getcwd()
-    train(wrapper_origin_file_name="1636907246_X_train.csv",
+    train(wrapper_origin_file_name="X_train.csv",
           wrapper_branch="main",  # branch_to_exp,
           wrapper_gitwd=cwd,
           wrapper_mlflow_azure=True,

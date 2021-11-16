@@ -34,7 +34,8 @@ def train_wrapper(func):
                     blob=wrapper_origin_file_name)
 
                 # Download csv file
-                with open(wrapper_origin_file_name, "wb") as download_file:
+                with open("./data/" + wrapper_origin_file_name, "wb") as \
+                        download_file:
                     download_file.write(blob_client.download_blob().readall())
 
         data = pd.read_csv("./data/" + wrapper_origin_file_name)
