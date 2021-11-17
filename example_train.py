@@ -41,5 +41,5 @@ if __name__ == "__main__":
           wrapper_mlflow_azure=True,
           wrapper_azure_container_name="data",
           wrapper_experiment_name="iris_classification",
-          max_depth=2
+          max_depth=1
           )
