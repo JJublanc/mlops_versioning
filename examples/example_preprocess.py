@@ -6,8 +6,6 @@ from sklearn.model_selection import train_test_split
 from sklearn import datasets
 import numpy as np
 
-from azure.storage.blob import BlobServiceClient
-
 target_col = 'target'
 
 if "iris.csv" not in os.listdir("data"):

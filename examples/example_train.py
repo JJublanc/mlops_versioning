@@ -1,3 +1,4 @@
+import numpy as np
 import os
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
@@ -5,6 +6,18 @@ from sklearn.metrics import accuracy_score
 from wrapper.train_wrapper import train_wrapper
 
 branch_to_exp = "train"
+
+
+def get_max_data_id(data_folder="../data"):
+    data_ids = []
+    files = os.listdir(data_folder)
+    for file in files:
+        try:
+            id_data = int(file.split("_")[0])
+            data_ids.append(id_data)
+        except:
+            pass
+    return str(np.max(data_ids))
 
 
 @train_wrapper
