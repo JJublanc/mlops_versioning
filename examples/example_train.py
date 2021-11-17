@@ -8,7 +8,7 @@ from wrapper.train_wrapper import train_wrapper
 branch_to_exp = "train"
 
 
-def get_max_data_id(data_folder="../data"):
+def get_max_data_id(data_folder="./data"):
     data_ids = []
     files = os.listdir(data_folder)
     for file in files:
@@ -42,7 +42,7 @@ def train(X_train: pd.DataFrame,
 
 if __name__ == "__main__":
     cwd = os.getcwd()
-    data_id = str(1637122335)
+    data_id = get_max_data_id()
     input_data = {"X_train": f"{data_id}_X_train.csv",
                   "y_train": f"{data_id}_y_train.csv",
                   "X_test": f"{data_id}_X_test.csv",
