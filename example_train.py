@@ -11,9 +11,10 @@ branch_to_exp = "train"
 def train(X_train: pd.DataFrame,
           y_train: pd.DataFrame,
           X_test: pd.DataFrame,
-          y_test: pd.DataFrame):
+          y_test: pd.DataFrame,
+          max_depth: int):
     # Train
-    clf = RandomForestClassifier()
+    clf = RandomForestClassifier(max_depth=max_depth)
     clf.fit(X_train, y_train)
 
     # Test
@@ -38,4 +39,7 @@ if __name__ == "__main__":
           wrapper_branch="main",  # branch_to_exp,
           wrapper_gitwd=cwd,
           wrapper_mlflow_azure=True,
-          wrapper_azure_container_name="data")
+          wrapper_azure_container_name="data",
+          wrapper_experiment_name="iris_classification",
+          max_depth=2
+          )

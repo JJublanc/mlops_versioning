@@ -9,7 +9,7 @@ from wrapper.commit import check_branch, commit_code
 
 
 def get_data_from_storage(wrapper_azure_container_name: str,
-                          wrapper_origin_file_name: str,
+                          wrapper_origin_file_name: str
                           ) -> None:
     if wrapper_azure_container_name:
         if wrapper_origin_file_name not in os.listdir("./data/"):
@@ -34,6 +34,7 @@ def train_wrapper(func):
                 wrapper_input_data: dict,
                 wrapper_mlflow_azure: bool = False,
                 wrapper_azure_container_name: str = None,
+                wrapper_experiment_name: str = 'default_model',
                 *args, **kwargs):
         ##########################
         # Set repo git in python #
@@ -52,8 +53,7 @@ def train_wrapper(func):
         #####################
         # Set mlflow params #
         #####################
-        experiment_name = 'default_model'
-        mlflow.set_experiment(experiment_name)
+        mlflow.set_experiment(wrapper_experiment_name)
 
         #################
         # Config mlFlow #
@@ -62,7 +62,7 @@ def train_wrapper(func):
         if wrapper_mlflow_azure:
             ws = Workspace.from_config()
             mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri())
-            mlflow.set_experiment(experiment_name)
+            mlflow.set_experiment(wrapper_experiment_name)
 
         with mlflow.start_run():
 
