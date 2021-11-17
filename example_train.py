@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 from wrapper.train_wrapper import train_wrapper
 
 branch_to_exp = "train"
@@ -10,11 +12,17 @@ def train(X_train: pd.DataFrame,
           y_train: pd.DataFrame,
           X_test: pd.DataFrame,
           y_test: pd.DataFrame):
-    metrics = {"len_data": len(X_train)}
-    model = ["object", "that", "can", "be", "pickled!"]
+    # Train
+    clf = RandomForestClassifier()
+    clf.fit(X_train, y_train)
+
+    # Test
+    metrics = dict()
+    y_pred = clf.predict(X_test)
+    metrics["accuracy"] = accuracy_score(y_test, y_pred)
 
     results = {"metrics": metrics,
-               "model": model}
+               "model": clf}
     return results
 
 
