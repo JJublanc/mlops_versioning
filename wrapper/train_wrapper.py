@@ -4,27 +4,8 @@ import mlflow
 import os
 import pandas as pd
 import pickle
-from typing import Union
+from get_data import get_data_from_storage
 from wrapper.commit import check_branch, commit_code
-
-
-def get_data_from_storage(wrapper_azure_container_name: str,
-                          wrapper_origin_file_name: str
-                          ) -> None:
-    if wrapper_azure_container_name:
-        if wrapper_origin_file_name not in os.listdir("./data/"):
-            connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
-            blob_service_client = BlobServiceClient.from_connection_string(
-                connect_str)
-            blob_client = blob_service_client.get_blob_client(
-                container=wrapper_azure_container_name,
-                blob=wrapper_origin_file_name)
-
-            # Download csv file
-            with open("./data/" + wrapper_origin_file_name, "wb") as \
-                    download_file:
-                download_file.write(blob_client.download_blob().readall())
-
 
 # TODO : add link to commit in mlflow params
 # TODO : add link to data in mlflow params
