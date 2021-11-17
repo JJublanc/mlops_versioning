@@ -30,6 +30,14 @@ my experiment's results each time I preprocess data or I train a model.
 I use simple but efficient ids to track everything. For the data I use a time 
 stamps and for the training I use the run id given by mlflow.
 
+# Installation
+In order to use the module you have several solutions.
+If you want to make some tests with examples without installing anything you 
+can add your root folder to your python path.
+```
+export PYTHONPATH=$PYTHONPATH:.
+```
+
 # Usage
 
 You just have to install the module and call it in your script.
@@ -134,9 +142,9 @@ To launch unitary tests you can run pytest like that :
 python -m pytest
 ```
 
-To launch an example with a preprocessing function use the following command
+To launch an example with a preprocessing function use the following command.
 ```
-python example_preprocess.py
+python examples/example_preprocess.py
 ```
 
 To launch an example with a training function use the following command
