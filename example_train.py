@@ -10,7 +10,7 @@ def train(X_train: pd.DataFrame,
           y_train: pd.DataFrame,
           X_test: pd.DataFrame,
           y_test: pd.DataFrame):
-    metrics = {"len_data": len(data)}
+    metrics = {"len_data": len(X_train)}
     model = ["object", "that", "can", "be", "pickled!"]
 
     results = {"metrics": metrics,
@@ -20,13 +20,13 @@ def train(X_train: pd.DataFrame,
 
 if __name__ == "__main__":
     cwd = os.getcwd()
+    data_id = str(1637122335)
+    input_data = {"X_train": f"{data_id}_X_train.csv",
+                  "y_train": f"{data_id}_y_train.csv",
+                  "X_test": f"{data_id}_X_test.csv",
+                  "y_test": f"{data_id}_y_test.csv"}
 
-    input_data = {"X_train": ,
-                  "y_train": ,
-                  "X_test": ,
-                  "y_test": }
-
-    train(wrapper_input_data={"X_train":,
+    train(wrapper_input_data=input_data,
           wrapper_branch="main",  # branch_to_exp,
           wrapper_gitwd=cwd,
           wrapper_mlflow_azure=True,

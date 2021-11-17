@@ -44,7 +44,7 @@ def train_wrapper(func):
         # Get data #
         ############
         data = dict()
-        for key, value in wrapper_input_data:
+        for key, value in wrapper_input_data.items():
             get_data_from_storage(wrapper_azure_container_name,
                                   value)
             data[key] = pd.read_csv("./data/" + value)
@@ -70,7 +70,7 @@ def train_wrapper(func):
             # train your model #
             ####################
 
-            results = func(data, *args, **kwargs)
+            results = func(*args, **data, **kwargs)
 
             ####################
             # log your results #
