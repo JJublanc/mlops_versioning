@@ -6,7 +6,7 @@ import pandas as pd
 import time
 from typing import Union
 from wrapper.commit import check_branch, commit_code
-from wrapper.preprocess import get_data, add_col_prefix_ds
+from wrapper.preprocess import get_xy_from_data_path, add_col_prefix_ds
 
 
 def preprocess_wrapper(func):
@@ -27,8 +27,8 @@ def preprocess_wrapper(func):
         # Get data #
         ############
 
-        X, y = get_data(data_path=wrapper_data_path,
-                        target_cols=wrapper_target_cols)
+        X, y = get_xy_from_data_path(data_path=wrapper_data_path,
+                                     target_cols=wrapper_target_cols)
 
         ##############
         # Preprocess #
