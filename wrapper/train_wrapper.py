@@ -4,6 +4,7 @@ import mlflow
 import os
 import pandas as pd
 import pickle
+from typing import Union
 from wrapper.commit import check_branch, commit_code
 
 
@@ -30,7 +31,7 @@ def get_data_from_storage(wrapper_azure_container_name: str,
 def train_wrapper(func):
     def wrapper(wrapper_branch: str,
                 wrapper_gitwd: str,
-                wrapper_origin_file_name: str,
+                wrapper_input_data: dict,
                 wrapper_mlflow_azure: bool = False,
                 wrapper_azure_container_name: str = None,
                 *args, **kwargs):
@@ -42,17 +43,11 @@ def train_wrapper(func):
         ############
         # Get data #
         ############
-
-        if isinstance(wrapper_origin_file_name, str):
+        data = dict()
+        for key, value in wrapper_input_data:
             get_data_from_storage(wrapper_azure_container_name,
-                                  wrapper_origin_file_name)
-            data = pd.read_csv("./data/" + wrapper_origin_file_name)
-
-        if isinstance(wrapper_origin_file_name, list):
-            for file_name in wrapper_origin_file_name:
-                get_data_from_storage(wrapper_azure_container_name,
-                                      file_name)
-                data = pd.read_csv("./data/" + file_name)
+                                  value)
+            data[key] = pd.read_csv("./data/" + value)
 
         #####################
         # Set mlflow params #

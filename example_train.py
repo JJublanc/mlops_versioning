@@ -6,7 +6,10 @@ branch_to_exp = "train"
 
 
 @train_wrapper
-def train(data: pd.DataFrame):
+def train(X_train: pd.DataFrame,
+          y_train: pd.DataFrame,
+          X_test: pd.DataFrame,
+          y_test: pd.DataFrame):
     metrics = {"len_data": len(data)}
     model = ["object", "that", "can", "be", "pickled!"]
 
@@ -17,7 +20,13 @@ def train(data: pd.DataFrame):
 
 if __name__ == "__main__":
     cwd = os.getcwd()
-    train(wrapper_origin_file_name="X_train.csv",
+
+    input_data = {"X_train": ,
+                  "y_train": ,
+                  "X_test": ,
+                  "y_test": }
+
+    train(wrapper_input_data={"X_train":,
           wrapper_branch="main",  # branch_to_exp,
           wrapper_gitwd=cwd,
           wrapper_mlflow_azure=True,
