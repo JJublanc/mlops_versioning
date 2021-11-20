@@ -40,7 +40,7 @@ def preprocess(X: pd.DataFrame, y: pd.Series):
 
 if __name__ == "__main__":
     cwd = os.getcwd()
-    data_output, ts = preprocess(wrapper_branch="main",
+    data_output, ts = preprocess(wrapper_branch="preprocess_azure",
                                  wrapper_gitwd=cwd,
                                  wrapper_data_path='data/iris.csv',
                                  wrapper_target_cols="target",
