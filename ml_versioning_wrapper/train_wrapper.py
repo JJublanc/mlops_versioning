@@ -7,6 +7,7 @@ import pickle
 from get_data import get_data_from_storage
 from ml_versioning_wrapper.commit import check_branch, commit_code
 
+
 # TODO : add link to commit in mlflow params
 # TODO : add link to data in mlflow params
 def train_wrapper(func):
@@ -20,7 +21,7 @@ def train_wrapper(func):
         ##########################
         # Set repo git in python #
         ##########################
-        repo = check_branch(wrapper_branch, wrapper_gitwd)
+        repo, repo_url = check_branch(wrapper_branch, wrapper_gitwd)
 
         ############
         # Get data #
@@ -66,6 +67,8 @@ def train_wrapper(func):
                     mlflow.log_artifact(f"{object_}.pkl")
                     os.remove(f"{object_}.pkl")
 
+            mlflow.log_params(wrapper_input_data)
+            mlflow.log_params({"repo url":repo_url})
             run = mlflow.active_run()
             run_id = run.info.run_id
 

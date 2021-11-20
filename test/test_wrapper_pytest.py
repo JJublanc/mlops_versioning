@@ -3,7 +3,8 @@ import pandas as pd
 import numpy as np
 import mock
 from ml_versioning_wrapper.get_data import get_data_from_storage
-from ml_versioning_wrapper.preprocess_wrapper import add_col_prefix_ds, get_xy_from_data_path
+from ml_versioning_wrapper.preprocess_wrapper import add_col_prefix_ds, \
+                                                     get_xy_from_data_path
 
 
 @pytest.fixture
