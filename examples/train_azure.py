@@ -49,7 +49,7 @@ if __name__ == "__main__":
                   "y_test": f"{data_id}_y_test.csv"}
 
     train(wrapper_input_data=input_data,
-          wrapper_branch="train_azure",  
+          wrapper_branch="train_azure",
           wrapper_gitwd=cwd,
           wrapper_mlflow_azure=True,
           wrapper_azure_container_name="data",
