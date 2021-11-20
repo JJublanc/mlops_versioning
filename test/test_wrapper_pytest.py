@@ -2,8 +2,8 @@ import pytest
 import pandas as pd
 import numpy as np
 import mock
-from wrapper.get_data import get_data_from_storage
-from wrapper.preprocess_wrapper import add_col_prefix_ds, get_xy_from_data_path
+from ml_versioning_wrapper.get_data import get_data_from_storage
+from ml_versioning_wrapper.preprocess_wrapper import add_col_prefix_ds, get_xy_from_data_path
 
 
 @pytest.fixture
@@ -41,7 +41,7 @@ def test_add_col_prefix_ds(data_sample):
                                   "feature_unused_col2"]
 
 
-@mock.patch('wrapper.preprocess_wrapper.pd.read_csv',
+@mock.patch('ml_versioning_wrapper.preprocess_wrapper.pd.read_csv',
             return_value=pd.DataFrame({"target": [0, 1],
                                        "feature": [0, 1]}))
 def test_get_xy_from_path(mock):
@@ -57,7 +57,7 @@ def test_get_xy_from_path(mock):
 
 
 @mock.patch('builtins.open')
-@mock.patch('wrapper.preprocess_wrapper.'
+@mock.patch('ml_versioning_wrapper.preprocess_wrapper.'
             'BlobServiceClient.from_connection_string')
 def test_get_data_from_storage(mock_blob_service_client, mock_open_write):
     get_data_from_storage(wrapper_azure_container_name="test",

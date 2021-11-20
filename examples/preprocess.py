@@ -1,5 +1,5 @@
 import os
-from wrapper.preprocess_wrapper import preprocess_wrapper
+from ml_versioning_wrapper.preprocess_wrapper import preprocess_wrapper
 
 import pandas as pd
 from sklearn.model_selection import train_test_split

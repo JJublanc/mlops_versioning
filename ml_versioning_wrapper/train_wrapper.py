@@ -5,7 +5,7 @@ import os
 import pandas as pd
 import pickle
 from get_data import get_data_from_storage
-from wrapper.commit import check_branch, commit_code
+from ml_versioning_wrapper.commit import check_branch, commit_code
 
 # TODO : add link to commit in mlflow params
 # TODO : add link to data in mlflow params

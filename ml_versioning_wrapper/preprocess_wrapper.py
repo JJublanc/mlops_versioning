@@ -5,8 +5,8 @@ import os
 import pandas as pd
 import time
 from typing import Union
-from wrapper.commit import check_branch, commit_code
-from wrapper.preprocess import get_xy_from_data_path, add_col_prefix_ds
+from ml_versioning_wrapper.commit import check_branch, commit_code
+from ml_versioning_wrapper.preprocess import get_xy_from_data_path, add_col_prefix_ds
 
 
 def preprocess_wrapper(func):
