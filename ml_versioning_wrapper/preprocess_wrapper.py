@@ -21,7 +21,7 @@ def preprocess_wrapper(func):
         ##########################
         # Set repo git in python #
         ##########################
-        repo = check_branch(wrapper_branch, wrapper_gitwd)
+        repo, _ = check_branch(wrapper_branch, wrapper_gitwd)
 
         ############
         # Get data #
